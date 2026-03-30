@@ -1,0 +1,118 @@
+{
+  "name": "Web app",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "19140b2f-bb9a-47cf-b1c9-c2821d164c2d",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "76ccb35e-73fd-4dc7-8d0d-7811d1d13cef",
+      "name": "Webhook",
+      "webhookId": "19140b2f-bb9a-47cf-b1c9-c2821d164c2d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=from given text generate a code based on text give me by user \nwithout any unwanted ,comments etc. just give me python code for it\ntext:{{ $json.body.text }}",
+        "options": {
+          "systemMessage": "your expect in generating code based on user text \nand your have 15+ year experience"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e8b21e21-6992-4b75-b4f9-c5e6723b19b3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "66767fc8-810e-4656-b3d0-c64e5f14ea79",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "0Ii9XpJWAueKHpmq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "e43dcddf-8073-4f21-8b42-08f9cc695143",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dddc546d-3613-477c-897a-89a99f768d69",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1e0dcb915890e8abb1eead3bf47da6f2de693e4017fdc9e2642d2bd69ef4e594"
+  },
+  "id": "p4pNRtVvXzL0A7Cx",
+  "tags": []
+}
